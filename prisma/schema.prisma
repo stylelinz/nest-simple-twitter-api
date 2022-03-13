@@ -9,3 +9,61 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  /// ID of the user
+  id Int @id @default(autoincrement())
+
+  /// create time of the user
+  createdAt DateTime @default(now()) @map("created_at")
+
+  /// last update time of the user
+  updatedAt DateTime @updatedAt
+
+  /// name of the user
+  name String @db.VarChar(255)
+
+  /// email of the user
+  email String @unique @db.VarChar(255)
+
+  /// account of the user, use for @<account_name>
+  account String @db.VarChar(255)
+
+  /// hashed password of the user
+  password String @db.VarChar(255)
+
+  /// avatar picture URL of the user
+  avatar String @default("https://image.flaticon.com/icons/png/512/847/847969.png")
+
+  /// introduction of the user
+  introduction String?
+
+  /// role of user
+  role  Role    @default(USER)
+
+  /// tweets of user
+  tweets Tweet[]
+}
+
+enum Role {
+  USER   @map("user")
+  ADMIN  @map("admin")
+}
+
+model Tweet {
+  /// ID of the tweet
+  id Int @id @default(autoincrement())
+
+  /// create time of the tweet
+  createdAt DateTime @default(now()) @map("created_at")
+
+  /// last update time of the tweet
+  updatedAt DateTime @updatedAt
+
+  /// content of the tweet
+  description String @db.VarChar(255)
+
+  /// author of the tweet
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int  @map("author_id")
+}
