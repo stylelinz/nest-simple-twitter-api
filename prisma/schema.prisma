@@ -43,6 +43,12 @@ model User {
 
   /// tweets of user
   tweets Tweet[]
+
+  /// follower who following the user
+  followedBy User[] @relation("UserFollows", references: [id])
+
+  /// users who followed by the user
+  following User[] @relation("UserFollows", references: [id])
 }
 
 enum Role {
