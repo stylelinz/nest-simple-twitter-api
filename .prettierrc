@@ -1,5 +1,7 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "semi": true
+  "semi": true,
+  "endOfLine": "lf",
+  "plugins": ["prettier-plugin-sorted"]
 }
