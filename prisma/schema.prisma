@@ -18,7 +18,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
 
   /// last update time of the user
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt
 
   /// name of the user
   name String @db.VarChar(255)
@@ -39,7 +39,7 @@ model User {
   introduction String?
 
   /// role of user
-  role  Role    @default(USER)
+  role Role @default(USER)
 
   /// tweets of user
   tweets Tweet[]
@@ -48,7 +48,10 @@ model User {
   followedBy User[] @relation("UserFollows", references: [id])
 
   /// users who followed by the user
-  following User[] @relation("UserFollows", references: [id])
+  following User[]  @relation("UserFollows", references: [id])
+
+  /// replies sent by the user
+  replies  Reply[]
 }
 
 enum Role {
@@ -63,8 +66,8 @@ model Tweet {
   /// create time of the tweet
   createdAt DateTime @default(now()) @map("created_at")
 
-  /// last update time of the tweet
-  updatedAt DateTime @updatedAt
+  /// lastest update time of the tweet
+  updatedAt DateTime? @updatedAt
 
   /// content of the tweet
   description String @db.VarChar(255)
@@ -72,4 +75,26 @@ model Tweet {
   /// author of the tweet
   author   User @relation(fields: [authorId], references: [id])
   authorId Int  @map("author_id")
+
+  /// replies of the tweet
+  replies Reply[]
+}
+
+model Reply {
+  /// ID of the reply
+  id Int @id @default(autoincrement())
+
+  /// create time of the reply
+  createAt DateTime @default(now()) @map("created_at")
+
+  /// last update time of the tweet
+  updatedAt DateTime? @updatedAt
+
+  /// author of the reply
+  replier   User @relation(fields: [replierId], references: [id])
+  replierId Int  @map("replier_id")
+
+  /// source tweet of the reply
+  tweet Tweet @relation(fields: [tweetId], references: [id])
+  tweetId Int @map("tweet_id")
 }
