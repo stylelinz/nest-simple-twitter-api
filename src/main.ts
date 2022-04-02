@@ -7,7 +7,10 @@ import { PrismaService } from './prisma/prisma.service';
 const APP_PORT = 3000;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: false,
+    cors: false,
+  });
 
   const prismaService = app.get(PrismaService);
   prismaService.enableShutdownHooks(app);
